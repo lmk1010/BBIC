@@ -1,0 +1,22 @@
+[ {
+				usercode : '19951010',
+				username : '刘明',
+				date : '2019-12-12',
+				catagory : '01001',
+				price : 1212.2,
+				score : 1212.2
+			}, {
+				usercode : '19951010',
+				username : '刘明d',
+				date : '2019-12-12',
+				catagory : '01001',
+				price : 1212.2,
+				score : 1212.2
+			}, {
+				usercode : '19951010',
+				username : '刘明',
+				date : '2019-12-12',
+				catagory : '01001',
+				price : 1212.2,
+				score : 1212.2
+			} ]

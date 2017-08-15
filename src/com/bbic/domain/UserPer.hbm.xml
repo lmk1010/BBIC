@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+
+<hibernate-mapping package="com.bbic.domain">
+<class name="UserPer" table="user_per">
+<id name="id" column="id">
+<generator class="uuid"></generator>
+</id>
+<property name="usercode" column="usercode"></property>
+<property name="username" column="username"></property>
+<property name="date" column="date"></property>
+<property name="catagory" column="catagory"></property>
+<property name="price" column="price"></property>
+<property name="score" column="score"></property>
+
+</class>
+
+
+</hibernate-mapping>

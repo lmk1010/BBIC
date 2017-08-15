@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="BBIC"
+  id="myeclipse.1492920625814"
+  context-root="/BBIC"
+  j2ee-spec="6.0"
+  archive="BBIC.war">
+  <attributes>
+    <attribute name="webrootdir" value="WebRoot" />
+  </attributes>
+</project-module>
+

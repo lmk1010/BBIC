@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+       					   http://www.springframework.org/schema/beans/spring-beans.xsd
+       					   http://www.springframework.org/schema/tx 
+       					   http://www.springframework.org/schema/tx/spring-tx.xsd
+       					   http://www.springframework.org/schema/aop 
+       					   http://www.springframework.org/schema/aop/spring-aop.xsd
+       					   http://www.springframework.org/schema/context 
+       					   http://www.springframework.org/schema/context/spring-context.xsd">
+       				
+       	<!-- 读取数据库配置文件 -->				   
+       	<bean id = "propertiesConfigure" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+       	<property name="location" value="classpath:hibernate.properties"></property>
+       	</bean>				   
+       	
+       	<!-- 配置数据源 -->				   
+       	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+       	<property name="driverClass" value="${jdbc.driverClass}"/>  
+        <!-- 指定连接数据库的URL-->  
+        <property name="jdbcUrl" value="${jdbc.jdbcUrl}"/>  
+        <!-- 指定连接数据库的用户名-->  
+        <property name="user" value="${jdbc.user}"/>  
+        <!-- 指定连接数据库的密码-->  
+        <property name="password" value="${jdbc.password}"/>  
+        <!-- 指定连接池中保留的最大连接数. Default:15-->  
+        <property name="maxPoolSize" value="${jdbc.maxPoolSize}"/>  
+        <!-- 指定连接池中保留的最小连接数-->  
+        <property name="minPoolSize" value="${jdbc.minPoolSize}"/>  
+        <!-- 指定连接池的初始化连接数  取值应在minPoolSize 与 maxPoolSize 之间.Default:3-->  
+        <property name="initialPoolSize" value="${jdbc.initialPoolSize}"/>  
+        <!-- 最大空闲时间,60秒内未使用则连接被丢弃。若为0则永不丢弃。 Default:0-->  
+        <property name="maxIdleTime" value="${jdbc.maxIdleTime}"/>  
+        <!-- 当连接池中的连接耗尽的时候c3p0一次同时获取的连接数. Default:3-->  
+        <property name="acquireIncrement" value="${jdbc.acquireIncrement}"/> 
+        <property name="maxStatements" value="${jdbc.maxStatements}"/>  
+        <!-- 每60秒检查所有连接池中的空闲连接.Default:0 -->  
+        <property name="idleConnectionTestPeriod" value="${jdbc.idleConnectionTestPeriod}"/>  
+       	</bean>
+       	
+       	<!-- 配置sessionfactory -->
+       	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+       	<property name="dataSource" ref="dataSource"></property>
+       	<property name="hibernateProperties">
+       	<props>
+	    <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+	    <prop key="hibernate.show_sql">true</prop>
+	    <prop key="hibernate.format_sql">true</prop>
+	    <prop key="hibernate.hbm2ddl.auto">update</prop>
+	    
+	 
+        </props>
+       	</property>
+       	<property name="mappingLocations" value="classpath:com/bbic/domain/*.hbm.xml"></property>
+  
+       	</bean>
+       	
+       	<!-- 配置DAO层 -->
+       	<bean id="userDao" class="com.bbic.dao.impl.UserDaoImpl">
+       	<property name="sessionFactory" ref="sessionFactory"></property>
+       	</bean>
+       	<bean id="userInfoDao" class="com.bbic.dao.impl.UserInfoDaoImpl">
+       	<property name="sessionFactory" ref="sessionFactory"></property>
+       	</bean>
+       	<bean id="userPerDao" class="com.bbic.dao.impl.UserPerDaoImpl">
+       	<property name="sessionFactory" ref="sessionFactory"></property>
+       	</bean>
+       	
+       					   
+       	<!-- 配置SERIVCE层 -->				   
+       	<bean id="userService" class="com.bbic.service.impl.UserServiceImpl">
+       	<property name="userDao" ref="userDao"></property>
+       	</bean>
+       	<bean id="userInfoService" class="com.bbic.service.impl.UserInfoServiceImpl">
+       	<property name="userInfoDao" ref="userInfoDao"></property>
+       	</bean>
+       	<bean id="userPerService" class="com.bbic.service.impl.UserPerServiceImpl">
+       	<property name="userPerDao" ref="userPerDao"></property>
+       	</bean>
+       	<bean id="mainService" class="com.bbic.service.impl.MainServiceImpl">
+       	<property name="userPerDao" ref="userPerDao"></property>
+       	</bean>
+       	
+       	<!-- 配置工具包 -->
+       				   
+       	
+       	<!-- 配置事物管理器 -->
+	<bean id="txManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+       	
+       	<!-- 配置事物切面tx通知 -->
+	<tx:advice id="txAdvice" transaction-manager="txManager">
+		<tx:attributes>
+			<tx:method name="add*" propagation="REQUIRES_NEW" isolation="DEFAULT" read-only="false" />
+			<tx:method name="get*" propagation="REQUIRES_NEW" isolation="DEFAULT"/>
+			<tx:method name="sel*" propagation="REQUIRES_NEW"/>
+			<tx:method name="up*" propagation="REQUIRES_NEW"/>
+			<tx:method name="del*" propagation="REQUIRES_NEW"/>
+			<tx:method name="select*" propagation="REQUIRES_NEW"/>
+			<tx:method name="delete*" propagation="REQUIRES_NEW"/>
+		</tx:attributes>
+	</tx:advice>
+       	
+       	<!-- 配置AOP -->
+	<aop:config>
+		<aop:pointcut expression="execution(* com.bbic.dao..*.*(..))"
+			id="pointcut" />
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="pointcut" />
+	</aop:config>  
+       					   
+</beans>      					   
