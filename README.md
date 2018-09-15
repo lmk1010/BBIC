@@ -1,8 +1,8 @@
 # BBIC
 
-## My first SSH Project About Manager System
+## SSH Project About Manager System
 
-**xxx管理系统 采用spring+springmvc+hibernate的方式，并未采用maven搭建，下一版本会考虑使用，里面使用ajax动态跳转异步刷新局部页面。**
+**业务通用管理系统采用spring+springmvc+hibernate的方式，并未采用maven搭建，下一版本会考虑使用，里面使用ajax动态跳转异步刷新局部页面。**
 
 ***
 整体介绍:
@@ -21,7 +21,7 @@
 * PoiExcel为读取excel的工具类，测试类为com.bbic.test下的testread,只需要输入excel地址即可测试。如需调整为自己的excel输入格式，只需修改com.bbic.utils下的ListConvertMap下的emp数组对于你excel中相应的列名即可。
 
 ***
-小小新人一个*.*
+*.*
 
 具体可以关注
            个人微信公众号：HlmkTech.
